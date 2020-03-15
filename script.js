@@ -4,6 +4,9 @@ const count = document.getElementById('count');
 const total = document.getElementById('total');
 const movieSelect = document.getElementById('movie');
 const selected = document.getElementsByClassName('selected');
+
+populateUI();
+
 //by adding + turn it into a number type
 // also we use let since we need to reassign ticketPrice in the movie select event
 let ticketPrice = +movieSelect.value;
@@ -34,6 +37,24 @@ function updateSelectedCount() {
   total.innerText = selectedSeatsCount * ticketPrice;
 }
 
+// Get data from localstorage and populate UI
+function populateUI() {
+  const selectedSeats = JSON.parse(localStorage.getItem('selectedSeats'));
+  console.log(selectedSeats);
+  // to see if anything is the local storage and if it is not an emptyarray
+  if (selectedSeats !== null && selectedSeats.length > 0) {
+    seats.forEach((seat, index) => {
+      if (selectedSeats.indexOf(index) > -1) {
+        seat.classList.add('selected');
+      }
+    });
+  }
+  const selectedMovieIndex = localStorage.getItem('selectedMovieIndex');
+  if (selectedMovieIndex !== null) {
+    movieSelect.selectedIndex = selectedMovieIndex;
+  }
+}
+
 // movie select event
 
 movieSelect.addEventListener('change', e => {
@@ -55,3 +76,6 @@ container.addEventListener('click', e => {
     updateSelectedCount();
   }
 });
+
+//  Initial count and total set
+updateSelectedCount();
